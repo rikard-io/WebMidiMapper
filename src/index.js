@@ -1,11 +1,10 @@
-import AsyncComputed from "vue-async-computed";
 import webMidiMapper from "./webMidiMapper";
-import Vue from "vue";
-import App from "./gui/App.vue";
+
 import querySelector from "@/utils/querySelector";
 import actions from "./actions";
 import store from "@/store";
 import "./scss/main.scss";
+import gui from './gui';
 
 // For chrome extension, if script is already injected (in App.vue),
 // just bring up selection
@@ -14,14 +13,6 @@ if (window.__wmm_enable) {
 } else {
 
   store.autoSave = true;
-  {
-    // make state reactive for vue
-    const tmpVm = new Vue({ data: { state: store.state } });
-    store.state = tmpVm.state;
-  }
-
-  Vue.use(AsyncComputed);
-  Vue.prototype.$store = store;
 
   store.on(
     "add-mapping",
@@ -59,17 +50,9 @@ if (window.__wmm_enable) {
   store.on("remove-mapping", ({ id }) => {
     webMidiMapper.unmap(id);
   });
-
-  Vue.config.productionTip = false;
-
-  const container = document.createElement("div");
-  document.body.appendChild(container);
-  webMidiMapper.enable().then(() => {
-    new Vue({
-      el: container,
-      render: h => h(App)
-    });
-
-    store.tryRestore();
-  });
 }
+
+webMidiMapper.enable().then(() => {
+  gui();
+  store.tryRestore();
+});

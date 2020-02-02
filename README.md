@@ -2,7 +2,7 @@
 
 [<img src="screenshot.gif" width="400"/>](/screenshot.gif)
 
-Just a silly Chrome extension to map DOM elements to incoming MIDI and apply various effects.
+A silly Chrome extension to map DOM elements to incoming MIDI and apply various effects.
 
 Add fun actions in actions.js.
 

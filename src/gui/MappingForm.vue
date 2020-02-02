@@ -4,7 +4,7 @@
       <div>
         <input v-model="selector" :class="{ error: !validSelector }" />
         <button @click="handleElementPick">
-          ✹
+          📌
         </button>
       </div>
     </td>
@@ -17,13 +17,15 @@
         v-model="mappingValue"
         :class="{ error: !validateMappingValue() }"
       /><button
-        :class="{ wmm__map_button: true, wmm__blink: autoMappingValue }"
+        :class="{ wmm__tint_button: true, wmm__blink: autoMappingValue }"
         @click="handleAutoMapValue"
       >
         m
       </button>
     </td>
-    <td><ActionSelect v-model="action" /></td>
+    <td><ActionSelect v-model="action" />      <button ref="inputDot" class="wmm__tint_button">
+        t
+      </button></td>
     <td><slot /></td>
   </tr>
 </template>
@@ -55,6 +57,7 @@ export default {
   props: ["value"],
   data() {
     return {
+      uiMappingId: null,
       autoMappingValue: false,
       currentTargetEl: null
     };
@@ -179,12 +182,39 @@ export default {
       });
     }
   },
+  mounted(){
+    setTimeout(()=>{
+      this.updateMapping();
+    },200);
+  },
   methods: {
+    handleTrigger() {
+      this.$refs.inputDot.classList.add("wmm__mapping_form_active");
+      setTimeout(() => {
+        this.$refs.inputDot.classList.remove("wmm__mapping_form_active");
+      }, 50);
+    },
+    updateMapping() {
+      if (this.uiMappingId) {
+        webMidiMapper.unmap(this.uiMappingId);
+      }
+      this.uiMappingId = webMidiMapper.map(
+        this.inputId,
+        this.event,
+        () => {
+          this.handleTrigger();
+        },
+        this.mappingValue,
+        this.channel
+      ).id;
+  
+    },
     handleAutoMapValue() {
       this.autoMappingValue = true;
       webMidiMapper.nextValue(this.inputId, this.event, e => {
         this.value.value = e.value;
         this.autoMappingValue = false;
+        this.handleInput();
       });
     },
     validateMappingValue() {
@@ -202,6 +232,7 @@ export default {
     },
     handleInput() {
       this.$emit("input", this.serialize());
+      this.updateMapping();
     },
     serialize() {
       return {
@@ -239,7 +270,7 @@ export default {
 }
 
 #wmm__app__ {
-  button.wmm__map_button {
+  button.wmm__tint_button {
     position: absolute;
     width: 8px !important;
     height: 8px !important;
@@ -255,9 +286,13 @@ export default {
     border-radius: 0;
     padding: 0;
     font-size: 5px;
-
+    color: #fff;
     &.wmm__blink {
       animation: wmm__blinking 0.5s infinite;
+    }
+
+    &.wmm__mapping_form_active{
+      background: #fff;
     }
   }
 }
