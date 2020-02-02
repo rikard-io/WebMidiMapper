@@ -23,9 +23,12 @@
         m
       </button>
     </td>
-    <td><ActionSelect v-model="action" />      <button ref="inputDot" class="wmm__tint_button">
+    <td>
+      <ActionSelect v-model="action" />
+      <button ref="inputDot" class="wmm__tint_button">
         t
-      </button></td>
+      </button>
+    </td>
     <td><slot /></td>
   </tr>
 </template>
@@ -182,10 +185,10 @@ export default {
       });
     }
   },
-  mounted(){
-    setTimeout(()=>{
+  mounted() {
+    setTimeout(() => {
       this.updateMapping();
-    },200);
+    }, 200);
   },
   methods: {
     handleTrigger() {
@@ -207,7 +210,6 @@ export default {
         this.mappingValue,
         this.channel
       ).id;
-  
     },
     handleAutoMapValue() {
       this.autoMappingValue = true;
@@ -291,7 +293,7 @@ export default {
       animation: wmm__blinking 0.5s infinite;
     }
 
-    &.wmm__mapping_form_active{
+    &.wmm__mapping_form_active {
       background: #fff;
     }
   }

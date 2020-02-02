@@ -3,8 +3,7 @@ import eventMixin from "@/utils/eventMixin";
 class ElementSelect {
   constructor() {
     const hoverBox = document.createElement("div");
-    console.log("hoverBox: ", hoverBox);
-    hoverBox.style.position = "absolute";
+   hoverBox.style.position = "absolute";
     // change to whatever highlight color you want
     hoverBox.style.background = "lightblue";
     hoverBox.style.opacity = 0.3;
