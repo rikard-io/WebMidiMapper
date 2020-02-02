@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WebMidiMapper</title>
+  <style>
+    #dot,#square,#triangle{
+      display: inline-block;
+    }
+  #dot{
+   width: 100px;
+   height: 100px;
+   background: #334;
+   border-radius: 50%; 
+  }
+  #square{
+   width: 100px;
+   height: 100px;
+   background: rgb(240, 0, 72); 
+  }
+  #triangle{
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 100px solid rgb(29, 209, 83);
+  }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="dot"></div>
+  <div id="square"></div>
+  <div id="triangle"></div>
+  <textarea>Hello, this is some text in a textarea</textarea>
+  <div>
+    <p class="title">HEJ!</p>
+    <div><p>This is some longer text embedded in a div and a p</p></div>
+    <a href="https://example.com">link</a>
+  </div>
+</div>
+<script>
+  triangle.addEventListener('keydown',(e)=>{
+    // console.log('triangle received keydown',e)
+  },false);
+</script>
+</body>
+</html>
