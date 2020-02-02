@@ -1,0 +1,32 @@
+{
+  "name": "webmidimapper",
+  "version": "1.0.1",
+  "description": "Just a silly Chrome extension to map dom elements to incoming MIDI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm version patch & webpack",
+    "serve": "webpack-dev-server --open"
+  },
+  "author": "Rikard Lindstrom <hi@rikard.io>",
+  "license": "MIT",
+  "devDependencies": {
+    "animate.css": "^3.7.2",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.2.0",
+    "file-loader": "^5.0.2",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "vue": "^2.6.11",
+    "vue-async-computed": "^3.8.2",
+    "vue-loader": "^15.8.3",
+    "vue-template-compiler": "^2.6.11",
+    "webmidi": "^2.5.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  }
+}
