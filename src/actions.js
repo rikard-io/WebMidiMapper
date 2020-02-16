@@ -82,7 +82,7 @@ export default {
   keydown: {
     name: "⌨️ Keydown",
     args: {
-      keyCode: Number
+      keyCode: Number,
     },
     create: (els, args) => {
       function getKeyCode(char) {
@@ -93,11 +93,28 @@ export default {
         }
         return keyCode;
       }
-      let keyCode = parseInt(args.keyCode);
+      function parseStringKey(str) {
+        str = str.replace(/"/, "");
+        if(str.length === 1){
+          return getKeyCode(str):
+        }
+        switch(str){
+          case 'left': return 37;
+          case 'right': return 39;
+          case 'up': return 38;
+          case 'down': return 40;
+          case 'enter': return 13;
+          case 'space': return 32;
+         }
+      }
       let charCode = args.keyCode.charCodeAt(0) || 0;
       if (isNaN(keyCode)) {
         keyCode = getKeyCode(args.keyCode);
       }
+      if (args.keyCode[0] === '"') {
+        keyCode = parseStringKey(args.keyCode);
+      }
+
       if (!keyCode) {
         console.error("invalid keycode for keydown action");
       }
