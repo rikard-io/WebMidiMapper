@@ -1,5 +1,9 @@
 import eventMixin from "@/utils/eventMixin";
 
+function deepClone(obj){
+  return JSON.parse(JSON.stringify(obj));
+}
+
 function compare(a, b) {
   const bKeys = Object.keys(b);
   for (var i = 0; i < bKeys.length; i++) {
@@ -23,11 +27,14 @@ export default {
     this._autoSave();
   },
   updateMapping(mapping) {
-    this.state.mappings[mapping.id] = {
-      ...this.state.mappings[mapping.id],
-      ...mapping
+    const old = this.getMapping(mapping.id);
+    const updated = {
+      ...old,
+      ...deepClone(mapping)
     };
-    this.trigger("update-mapping", this.getMapping(mapping.id));
+
+    this.state.mappings[mapping.id] = updated;
+    this.trigger("update-mapping", this.getMapping(mapping.id), old);
     this._autoSave();
   },
   removeMapping(id) {
@@ -42,14 +49,15 @@ export default {
     }
   },
   getMapping(id) {
-    return this.state.mappings[id];
+    return deepClone(this.state.mappings[id]);
   },
   getMappingByProps(props) {
     const propsWidthoutId = { ...props };
     delete propsWidthoutId.id;
-    return Object.values(this.state.mappings).find(m => {
+    const result = Object.values(this.state.mappings).find(m => {
       return compare(m, propsWidthoutId);
     });
+    return result ? deepClone(result) : null;
   },
   save() {
     const json = JSON.stringify(this.state);
