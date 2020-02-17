@@ -27,6 +27,10 @@
     border-right: 50px solid transparent;
     border-bottom: 100px solid rgb(29, 209, 83);
   }
+  #keytester{
+    border: 1px solid blue;
+    padding: 40px;
+  }
   </style>
 </head>
 <body>
@@ -38,11 +42,18 @@
     <p class="title">HEJ!</p>
     <div><p>This is some longer text embedded in a div and a p</p></div>
     <a href="https://example.com">link</a>
+    <div id="keytester">
+      KEY TEST, MAP KEYDOWN HERE
+    </div>
   </div>
 </div>
 <script>
-  triangle.addEventListener('keydown',(e)=>{
-    // console.log('triangle received keydown',e)
+  keytester.addEventListener('keydown',(e)=>{
+    console.log(e);
+    keytester.innerHTML = 'keyCode: '+e.keyCode + '<br/>'+ 'key: ' + e.key;
+  },false);
+  window.addEventListener('keydown',(e)=>{
+   console.log(e);
   },false);
 </script>
 </body>
