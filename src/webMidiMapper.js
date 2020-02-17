@@ -114,7 +114,7 @@ class WebMidiMapper {
     return webmidi.outputs;
   }
   get events() {
-    return webmidi.MIDI_CHANNEL_MESSAGES;
+    return {...webmidi.MIDI_CHANNEL_MESSAGES,...webmidi.MIDI_SYSTEM_MESSAGES};
   }
   mute() {
     this.muted = true;

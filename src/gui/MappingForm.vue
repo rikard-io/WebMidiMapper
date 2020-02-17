@@ -58,11 +58,17 @@ export default {
     ActionSelect
   },
   props: ["value"],
+  watch:{
+    value(v){
+      Object.assign(this.internalValue, ...v);
+    }
+  },
   data() {
     return {
       uiMappingId: null,
       autoMappingValue: false,
-      currentTargetEl: null
+      currentTargetEl: null,
+      internalValue: JSON.parse(JSON.stringify(this.value))
     };
   },
   computed: {
@@ -72,55 +78,55 @@ export default {
     },
     inputId: {
       get() {
-        return this.value.inputId;
+        return this.internalValue.inputId;
       },
       set(v) {
-        this.value.inputId = v;
+        this.internalValue.inputId = v;
         this.handleInput();
       }
     },
     channel: {
       get() {
-        return this.value.channel;
+        return this.internalValue.channel;
       },
       set(v) {
-        this.value.channel = v;
+        this.internalValue.channel = v;
         this.handleInput();
       }
     },
     event: {
       get() {
-        return this.value.event;
+        return this.internalValue.event;
       },
       set(v) {
-        this.value.event = v;
+        this.internalValue.event = v;
         this.handleInput();
       }
     },
     mappingValue: {
       get() {
-        return this.value.value;
+        return this.internalValue.value;
       },
       set(v) {
-        this.value.value = v;
+        this.internalValue.value = v;
         this.handleInput();
       }
     },
     action: {
       get() {
-        return this.value.action;
+        return this.internalValue.action;
       },
       set(v) {
-        this.value.action = v;
+        this.internalValue.action = v;
         this.handleInput();
       }
     },
     selector: {
       get() {
-        return this.value.selector;
+        return this.internalValue.selector;
       },
       set(v) {
-        this.value.selector = v;
+        this.internalValue.selector = v;
         this.handleInput();
       }
     },
@@ -239,12 +245,12 @@ export default {
     serialize() {
       return {
         id: this.value.id,
-        selector: this.selector,
-        inputId: this.inputId,
-        event: this.event,
-        action: this.action,
-        value: this.mappingValue,
-        channel: this.channel
+        selector: this.internalValue.selector,
+        inputId: this.internalValue.inputId,
+        event: this.internalValue.event,
+        action: this.internalValue.action,
+        value: this.internalValue.mappingValue,
+        channel: this.internalValue.channel
       };
     }
   }
