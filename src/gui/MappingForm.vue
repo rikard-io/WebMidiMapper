@@ -214,7 +214,7 @@ export default {
     handleAutoMapValue() {
       this.autoMappingValue = true;
       webMidiMapper.nextValue(this.inputId, this.event, e => {
-        this.value.value = e.value;
+        this.value.value = e.data[1];
         this.autoMappingValue = false;
         this.handleInput();
       });
