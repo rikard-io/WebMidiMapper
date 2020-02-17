@@ -1,6 +1,6 @@
 {
   "name": "webmidimapper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Just a silly Chrome extension to map dom elements to incoming MIDI.",
   "main": "index.js",
   "scripts": {
