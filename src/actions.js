@@ -15,6 +15,40 @@ function createAnimateJsAction(fx) {
 }
 
 export default {
+  filter:{
+    name: "🐫 Filter",
+    args: {
+      type: ['blur',
+      'brightness',
+      'contrast',
+      'grayscale',
+      'hue-rotate',
+      'invert',
+      'opacity',
+      'saturate',
+      'sepia']
+    },
+    create: (els, args) =>{
+      const regString = `${args.type}\\(.*?\\)`;
+      const regEx = new RegExp(regString,'gmi');
+      return (event) => {
+        els.forEach(el => {
+          const unit = args.type === 'hue-rotate' ? 'deg' : (args.type === 'blur' ? 'px' : '');
+          const max = unit === 'px' ? 40 : (unit === 'deg' ? 360 : 1);
+          const val = (event.data[2] / 127) * max;
+          el.style.filter = el.style.filter.replace(regEx,'');
+          el.style.filter += ` ${args.type}(${val}${unit})`;
+        });
+      };
+    },
+    clear: (els, args) =>{
+      const regString = `${args.type}\\(.*?\\)`;
+      const regEx = new RegExp(regString,'gmi');
+      els.forEach(el => {
+        el.style.filter = el.style.filter.replace(regEx,'');
+      });
+    }
+  },
   bounce: {
     name: "🏀 Bounce",
     create: createAnimateJsAction("bounce")
@@ -86,17 +120,17 @@ export default {
     },
     create: (els, args) => {
       function getKeyCode(char) {
-        var keyCode = char.charCodeAt(0);
+        let keyCode = char.charCodeAt(0);
         if (keyCode > 90) {
           // 90 is keyCode for 'z'
           return keyCode - 32;
         }
         return keyCode;
       }
-      function parseStringKey(str) {
-        str = str.replace(/"/, "");
+      function parseStringKey(_str) {
+        let str = _str.replace(/\"/g, "");
         if(str.length === 1){
-          return getKeyCode(str):
+          return getKeyCode(str);
         }
         switch(str){
           case 'left': return 37;
@@ -105,19 +139,31 @@ export default {
           case 'down': return 40;
           case 'enter': return 13;
           case 'space': return 32;
+          default:
+            throw new Error('Unrecognized shorthand '+ str)
          }
       }
-      let charCode = args.keyCode.charCodeAt(0) || 0;
+
+      let keyCode;
+      let charCode;
+      if (args.keyCode[0] === '"') {
+        keyCode = parseStringKey(args.keyCode);
+        if(args.keyCode.length === 3) charCode = args.keyCode.charCodeAt(1);
+      } else {
+        keyCode = parseInt(args.keyCode);
+      }
+
+     
       if (isNaN(keyCode)) {
         keyCode = getKeyCode(args.keyCode);
       }
-      if (args.keyCode[0] === '"') {
-        keyCode = parseStringKey(args.keyCode);
-      }
-
+      
       if (!keyCode) {
         console.error("invalid keycode for keydown action");
       }
+
+      if(!charCode) charCode = keyCode;
+
       return () => {
         els.forEach(el => {
           el.dispatchEvent(

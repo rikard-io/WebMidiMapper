@@ -32,7 +32,9 @@ if (window.__wmm_enable) {
 
   store.on(
     "update-mapping",
-    ({ id, selector, inputId, event, action, value, channel }) => {
+    ({ id, selector, inputId, event, action, value, channel }, old) => {
+      if(actions[old.action.key].clear) actions[old.action.key].clear(querySelector(old.selector), old.action.args)
+
       const targetEls = querySelector(selector);
       webMidiMapper.unmap(id);
       webMidiMapper

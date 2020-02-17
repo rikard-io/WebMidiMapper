@@ -9,13 +9,20 @@
         >{{ action.name }}</option
       >
     </select>
-    <input
-      @input="handleArgInput"
-      v-for="(v, k) in args"
-      :key="k"
-      v-model="args[k]"
-      :placeholder="k"
-    />
+    <template v-for="(v, k) in args">
+      <select v-if="Array.isArray(argsOptions(k))" class="select" :key="k" v-model="args[k]" @input="handleArgInput">
+        <option v-for="opt in argsOptions(k)" :value="opt" :key="opt">{{
+          opt
+        }}</option>
+      </select>
+      <input
+        v-else
+        :key="k"
+        @input="handleArgInput"
+        v-model="args[k]"
+        :placeholder="k"
+      />
+    </template>
   </div>
 </template>
 
@@ -40,7 +47,12 @@ export default {
       });
     },
     handleArgInput({ currentTarget }) {
-      this.$emit("input", this.value);
+      setTimeout(()=>{
+        this.$emit("input", this.value);
+      },20)
+    },
+    argsOptions(key) {
+      return this.action && this.action.args[key];
     }
   },
   computed: {
