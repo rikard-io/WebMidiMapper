@@ -48,20 +48,29 @@ export default {
     },
     handleArgInput({ currentTarget }) {
       setTimeout(()=>{
-        this.$emit("input", this.value);
+        this.$emit("input", {key: this.key, args: this.args});
       },20)
     },
     argsOptions(key) {
       return this.action && this.action.args[key];
     }
   },
-  computed: {
-    args() {
-      if (!this.value) {
-        return {};
+  watch:{
+    value:{
+      immediate: true,
+      handler(v){
+        this.key = v.key;
+        this.args = v.args;
       }
-      return this.value.args;
-    },
+    }
+  },
+  data(){
+    return {
+      key: '',
+      args: {}
+    }
+  },
+  computed: {
     action() {
       return this.value ? actions[this.value.key] : null;
     },

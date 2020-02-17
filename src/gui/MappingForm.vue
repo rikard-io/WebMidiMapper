@@ -59,8 +59,11 @@ export default {
   },
   props: ["value"],
   watch:{
-    value(v){
-      Object.assign(this.internalValue, ...v);
+    value: {
+      immediate: true,
+      handler(v){
+        Object.assign(this.internalValue, {value: 'all'}, v);
+      }
     }
   },
   data() {
@@ -249,7 +252,7 @@ export default {
         inputId: this.internalValue.inputId,
         event: this.internalValue.event,
         action: this.internalValue.action,
-        value: this.internalValue.mappingValue,
+        value: this.internalValue.value,
         channel: this.internalValue.channel
       };
     }
