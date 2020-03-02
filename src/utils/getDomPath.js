@@ -14,9 +14,11 @@ export default function getDomPath(el) {
     }
     if (el.hasAttribute("id") && el.id != "") {
       stack.unshift(el.nodeName.toLowerCase() + "#" + el.id);
+      // we can break here as Id should be enough of a starting point for selector
+      return stack.join(" ");
     } else if (sibCount > 1) {
       stack.unshift(
-        el.nodeName.toLowerCase() + ":nth-child(" + (sibIndex + 2) + ")"
+        el.nodeName.toLowerCase() + ":nth-child(" + (sibIndex + 1) + ")"
       );
     } else {
       stack.unshift(el.nodeName.toLowerCase());
