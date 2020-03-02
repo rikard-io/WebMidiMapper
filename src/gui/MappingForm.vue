@@ -2,7 +2,12 @@
   <tr class="wmm__mapping_form">
     <td>
       <div>
-        <input v-model="selector" @keydown.capture="e=>e.stopPropagation()" @keyup.capture="e=>e.stopPropagation()" :class="{ error: !validSelector }" />
+        <input
+          v-model="selector"
+          @keydown.capture="e => e.stopPropagation()"
+          @keyup.capture="e => e.stopPropagation()"
+          :class="{ error: !validSelector }"
+        />
         <button @click="handleElementPick">
           📌
         </button>
@@ -14,7 +19,8 @@
     <td class="wmm__mapping_form_input">
       <input
         type="text"
-        @keydown.capture="e=>e.stopPropagation()" @keyup.capture="e=>e.stopPropagation()"
+        @keydown.capture="e => e.stopPropagation()"
+        @keyup.capture="e => e.stopPropagation()"
         v-model="mappingValue"
         :class="{ error: !validateMappingValue() }"
       /><button
@@ -26,7 +32,12 @@
     </td>
     <td>
       <ActionSelect ref="actionSelect" v-model="action" />
-      <button v-if="validate()" @click="handleActionPreview" ref="inputDot" class="wmm__tint_button">
+      <button
+        v-if="validate()"
+        @click="handleActionPreview"
+        ref="inputDot"
+        class="wmm__tint_button"
+      >
         T
       </button>
     </td>
@@ -200,14 +211,16 @@ export default {
     }, 200);
   },
   methods: {
-    captureInput(e){
-      e.stopPropagation()
-      console.log('whoop');
+    captureInput(e) {
+      e.stopPropagation();
     },
-    handleActionPreview(){
-      const actionFn = actions[this.action.key].create(querySelector(this.selector), this.action.args);
+    handleActionPreview() {
+      const actionFn = actions[this.action.key].create(
+        querySelector(this.selector),
+        this.action.args
+      );
       actionFn({
-        data: [127,127]
+        data: [127, 127]
       });
     },
     validate() {
@@ -242,15 +255,19 @@ export default {
     },
     handleAutoMapValue() {
       this.autoMappingValue = !this.autoMappingValue;
-      if(this.autoMappingValue){
-        this.nextValueMappingRef = webMidiMapper.nextValue(this.inputId, this.event, e => {
-          this.internalValue.value = e.data[1];
-          this.autoMappingValue = false;
-          this.handleInput();
-          this.nextValueMappingRef = null;
-        });
+      if (this.autoMappingValue) {
+        this.nextValueMappingRef = webMidiMapper.nextValue(
+          this.inputId,
+          this.event,
+          e => {
+            this.internalValue.value = e.data[1];
+            this.autoMappingValue = false;
+            this.handleInput();
+            this.nextValueMappingRef = null;
+          }
+        );
       } else {
-        if(this.nextValueMappingRef){
+        if (this.nextValueMappingRef) {
           this.nextValueMappingRef.cancel();
           this.nextValueMappingRef = null;
         }

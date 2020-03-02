@@ -1,20 +1,20 @@
-import webMidiMapper from "./webMidiMapper";
-import querySelector from "@/utils/querySelector";
-import actions from "./actions";
-import store from "@/store";
-import gui from "./gui";
+import webMidiMapper from './webMidiMapper'
+import querySelector from '@/utils/querySelector'
+import actions from './actions'
+import store from '@/store'
+import gui from './gui'
 
 // For chrome extension, if script is already injected (in App.vue),
 // just bring up selection
 if (window.__wmm_enable) {
-  window.__wmm_enable();
+  window.__wmm_enable()
 } else {
-  store.autoSave = true;
+  store.autoSave = true
 
   store.on(
-    "add-mapping",
+    'add-mapping',
     ({ id, selector, inputId, event, action, value, channel }) => {
-      let targetEls = querySelector(selector);
+      const targetEls = querySelector(selector)
       webMidiMapper
         .map(
           inputId,
@@ -23,21 +23,22 @@ if (window.__wmm_enable) {
           value,
           channel
         )
-        .setId(id);
+        .setId(id)
     }
-  );
+  )
 
   store.on(
-    "update-mapping",
+    'update-mapping',
     ({ id, selector, inputId, event, action, value, channel }, old) => {
-      if (actions[old.action.key].clear)
+      if (actions[old.action.key].clear) {
         actions[old.action.key].clear(
           querySelector(old.selector),
           old.action.args
-        );
+        )
+      }
 
-      const targetEls = querySelector(selector);
-      webMidiMapper.unmap(id);
+      const targetEls = querySelector(selector)
+      webMidiMapper.unmap(id)
       webMidiMapper
         .map(
           inputId,
@@ -46,16 +47,16 @@ if (window.__wmm_enable) {
           value,
           channel
         )
-        .setId(id);
+        .setId(id)
     }
-  );
+  )
 
-  store.on("remove-mapping", ({ id }) => {
-    webMidiMapper.unmap(id);
-  });
+  store.on('remove-mapping', ({ id }) => {
+    webMidiMapper.unmap(id)
+  })
 }
 
 webMidiMapper.enable().then(() => {
-  gui();
-  store.tryRestore();
-});
+  gui()
+  store.tryRestore()
+})

@@ -1,17 +1,17 @@
-import Vue from "vue";
-import App from "./App.vue";
-import store from '@/store';
+import Vue from 'vue'
+import App from './App.vue'
+import store from '@/store'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
-export default function init(){
-  const container = document.createElement("div");
+export default function init () {
+  const container = document.createElement('div')
 
-  Vue.prototype.$store = store;
+  Vue.prototype.$store = store
 
-  document.body.appendChild(container);
-    new Vue({
-      el: container,
-      render: h => h(App)
-    });
+  document.body.appendChild(container)
+  Vue({
+    el: container,
+    render: h => h(App)
+  })
 }
