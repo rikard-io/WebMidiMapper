@@ -1,7 +1,6 @@
 import "./scss/actions.scss";
 
-function createAnimateJsAction(fx) {
-  return els => {
+function createAnimateJsAction(els, fx) {
     return () => {
       els.forEach(el => {
         el.classList.add("animated", fx);
@@ -11,7 +10,6 @@ function createAnimateJsAction(fx) {
         });
       });
     };
-  };
 }
 
 export default {
@@ -66,7 +64,7 @@ export default {
         });
       };
     },
-    clear: (els) => {
+    clear: els => {
       return () => {
         els.forEach(el => {
           el.style.transform = "";
@@ -74,25 +72,92 @@ export default {
       };
     }
   },
-  bounce: {
-    name: "🏀 Bounce",
-    create: createAnimateJsAction("bounce")
-  },
-  heartBeat: {
-    name: "❤️ Beat",
-    create: createAnimateJsAction("heartBeat")
-  },
-  flash: {
-    name: "📸 Flash",
-    create: createAnimateJsAction("flash")
-  },
-  rotateIn: {
-    name: "℺ Rotate",
-    create: createAnimateJsAction("rotateIn")
-  },
-  hinge: {
-    name: "⛓Hinge",
-    create: createAnimateJsAction("hinge")
+  animateJS: {
+    name: "Animate CSS",
+    args: {
+      type: [
+        "bounce",
+        "bounceIn",
+        "bounceInDown",
+        "bounceInLeft",
+        "bounceInRight",
+        "bounceInUp",
+        "bounceOut",
+        "bounceOutDown",
+        "bounceOutLeft",
+        "bounceOutRight",
+        "bounceOutUp",
+        "fadeIn",
+        "fadeInDown",
+        "fadeInDownBig",
+        "fadeInLeft",
+        "fadeInLeftBig",
+        "fadeInRight",
+        "fadeInRightBig",
+        "fadeInUp",
+        "fadeInUpBig",
+        "fadeOut",
+        "fadeOutDown",
+        "fadeOutDownBig",
+        "fadeOutLeft",
+        "fadeOutLeftBig",
+        "fadeOutRight",
+        "fadeOutRightBig",
+        "fadeOutUp",
+        "fadeOutUpBig",
+        "flash",
+        "flipInX",
+        "flipInY",
+        "flipOutX",
+        "flipOutY",
+        "headShake",
+        "heartBeat",
+        "hinge",
+        "jackInTheBox",
+        "jello",
+        "lightSpeedIn",
+        "lightSpeedOut",
+        "pulse",
+        "rollIn",
+        "rollOut",
+        "rotateIn",
+        "rotateInDownLeft",
+        "rotateInDownRight",
+        "rotateInUpLeft",
+        "rotateInUpRight",
+        "rotateOut",
+        "rotateOutDownLeft",
+        "rotateOutDownRight",
+        "rotateOutUpLeft",
+        "rotateOutUpRight",
+        "rubberBand",
+        "shake",
+        "slideInDown",
+        "slideInLeft",
+        "slideInRight",
+        "slideInUp",
+        "slideOutDown",
+        "slideOutLeft",
+        "slideOutRight",
+        "slideOutUp",
+        "swing",
+        "tada",
+        "wobble",
+        "zoomIn",
+        "zoomInDown",
+        "zoomInLeft",
+        "zoomInRight",
+        "zoomInUp",
+        "zoomOut",
+        "zoomOutDown",
+        "zoomOutLeft",
+        "zoomOutRight",
+        "zoomOutUp"
+      ]
+    },
+    create(els, args) {
+      return createAnimateJsAction(els, args.type);
+    }
   },
   shuffle: {
     name: "🌪 Shuffle",
@@ -138,10 +203,11 @@ export default {
       };
     }
   },
-  keydown: {
-    name: "⌨️ Keydown",
+  Keyboard: {
+    name: "⌨️ Keyboard",
     args: {
-      keyCode: Number
+      keyCode: Number,
+      event: ['keydown','keyup']
     },
     create: (els, args) => {
       function getKeyCode(char) {
@@ -189,7 +255,7 @@ export default {
       }
 
       if (!keyCode) {
-        console.error("invalid keycode for keydown action");
+        console.error("invalid keycode for keyboard action");
       }
 
       if (!charCode) charCode = keyCode;
@@ -197,7 +263,7 @@ export default {
       return () => {
         els.forEach(el => {
           el.dispatchEvent(
-            new KeyboardEvent("keydown", {
+            new KeyboardEvent(args.event, {
               keyCode,
               charCode,
               which: keyCode
