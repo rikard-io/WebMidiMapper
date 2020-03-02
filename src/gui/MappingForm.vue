@@ -24,7 +24,7 @@
       </button>
     </td>
     <td>
-      <ActionSelect v-model="action" />
+      <ActionSelect ref="actionSelect" v-model="action" />
       <button ref="inputDot" class="wmm__tint_button">
         t
       </button>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import actions from "@/actions";
 import webMidiMapper from "@/webMidiMapper";
 import { validateValue } from "@/webMidiMapper";
 import SelectList from "./SelectList";
@@ -58,11 +59,16 @@ export default {
     ActionSelect
   },
   props: ["value"],
-  watch:{
+  watch: {
     value: {
       immediate: true,
-      handler(v){
-        Object.assign(this.internalValue, {value: 'all'}, v);
+      handler(v) {
+        Object.assign(this.internalValue, { value: "all" }, v);
+      }
+    },
+    action: {
+      handler(e) {
+        this.handleInput();
       }
     }
   },
@@ -133,13 +139,6 @@ export default {
         this.handleInput();
       }
     },
-    valid() {
-      if (!this.action) return false;
-      if (!this.validSelector) {
-        return false;
-      }
-      return !this.$store.getMappingByProps(this.serialize());
-    },
     inputs() {
       return [
         {
@@ -200,6 +199,16 @@ export default {
     }, 200);
   },
   methods: {
+    validate() {
+      if (!this.action) return false;
+      if (!this.validSelector) {
+        return false;
+      }
+      if (!this.$refs.actionSelect.validate()) {
+        return false;
+      }
+      return !this.$store.getMappingByProps(this.serialize());
+    },
     handleTrigger() {
       this.$refs.inputDot.classList.add("wmm__mapping_form_active");
       setTimeout(() => {
@@ -242,7 +251,9 @@ export default {
       elementSelector.enable();
     },
     handleInput() {
-      this.$emit("input", this.serialize());
+      this.$nextTick(() => {
+        this.$emit("input", this.serialize());
+      });
       this.updateMapping();
     },
     serialize() {

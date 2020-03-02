@@ -5,7 +5,7 @@
     @input="validate"
     v-model="mapping"
   >
-    <button @click="handleAdd" :disabled="!valid">+</button>
+    <button @click="handleAdd" :disabled="!valid">+ ({{valid}})</button>
   </MappingForm>
 </template>
 
@@ -13,7 +13,6 @@
 import webMidiMapper from "@/webMidiMapper";
 import MappingForm from "./MappingForm";
 import getDomPath from "@/utils/getDomPath";
-import actions from "@/actions";
 
 function calculateSelector(el) {
   if (el.id) {
@@ -32,7 +31,7 @@ export default {
         inputId: "all",
         event: "noteon",
         value: "all",
-        action: { key: "bounce", args: null },
+        action: { key: "", args: null },
         selector: "",
         channel: "all"
       },
@@ -41,13 +40,13 @@ export default {
   },
   methods: {
     validate() {
-      if (!this.$refs.mappingForm.valid) {
+      if (!this.$refs.mappingForm.validate()) {
         this.valid = false;
-      }
-      if (this.$store.getMappingByProps(this.mapping)) {
+      } else if (this.$store.getMappingByProps(this.mapping)) {
         this.valid = false;
+      } else {
+        this.valid = true;
       }
-      this.valid = true;
     },
     reset() {
       this.mapping = {
@@ -55,7 +54,7 @@ export default {
         inputId: "all",
         event: "noteon",
         value: "all",
-        action: { key: "bounce", args: null },
+        action: { key: "", args: null },
         channel: "all"
       };
     },
