@@ -15,38 +15,63 @@ function createAnimateJsAction(fx) {
 }
 
 export default {
-  filter:{
+  filter: {
     name: "🐫 Filter",
     args: {
-      type: ['blur',
-      'brightness',
-      'contrast',
-      'grayscale',
-      'hue-rotate',
-      'invert',
-      'opacity',
-      'saturate',
-      'sepia']
+      type: [
+        "blur",
+        "brightness",
+        "contrast",
+        "grayscale",
+        "hue-rotate",
+        "invert",
+        "opacity",
+        "saturate",
+        "sepia"
+      ]
     },
-    create: (els, args) =>{
+    create: (els, args) => {
       const regString = `${args.type}\\(.*?\\)`;
-      const regEx = new RegExp(regString,'gmi');
-      return (event) => {
+      const regEx = new RegExp(regString, "gmi");
+      return event => {
         els.forEach(el => {
-          const unit = args.type === 'hue-rotate' ? 'deg' : (args.type === 'blur' ? 'px' : '');
-          const max = unit === 'px' ? 40 : (unit === 'deg' ? 360 : 1);
+          const unit =
+            args.type === "hue-rotate"
+              ? "deg"
+              : args.type === "blur"
+              ? "px"
+              : "";
+          const max = unit === "px" ? 40 : unit === "deg" ? 360 : 1;
           const val = (event.data[2] / 127) * max;
-          el.style.filter = el.style.filter.replace(regEx,'');
+          el.style.filter = el.style.filter.replace(regEx, "");
           el.style.filter += ` ${args.type}(${val}${unit})`;
         });
       };
     },
-    clear: (els, args) =>{
+    clear: (els, args) => {
       const regString = `${args.type}\\(.*?\\)`;
-      const regEx = new RegExp(regString,'gmi');
+      const regEx = new RegExp(regString, "gmi");
       els.forEach(el => {
-        el.style.filter = el.style.filter.replace(regEx,'');
+        el.style.filter = el.style.filter.replace(regEx, "");
       });
+    }
+  },
+  scale: {
+    name: "🔍 scale",
+    create(els) {
+      return event => {
+        els.forEach(el => {
+          const val = 1 + (event.data[2] / 127) * 20;
+          el.style.transform = `scale(${val})`;
+        });
+      };
+    },
+    clear: (els) => {
+      return () => {
+        els.forEach(el => {
+          el.style.transform = "";
+        });
+      };
     }
   },
   bounce: {
@@ -116,7 +141,7 @@ export default {
   keydown: {
     name: "⌨️ Keydown",
     args: {
-      keyCode: Number,
+      keyCode: Number
     },
     create: (els, args) => {
       function getKeyCode(char) {
@@ -129,40 +154,45 @@ export default {
       }
       function parseStringKey(_str) {
         let str = _str.replace(/\"/g, "");
-        if(str.length === 1){
+        if (str.length === 1) {
           return getKeyCode(str);
         }
-        switch(str){
-          case 'left': return 37;
-          case 'right': return 39;
-          case 'up': return 38;
-          case 'down': return 40;
-          case 'enter': return 13;
-          case 'space': return 32;
+        switch (str) {
+          case "left":
+            return 37;
+          case "right":
+            return 39;
+          case "up":
+            return 38;
+          case "down":
+            return 40;
+          case "enter":
+            return 13;
+          case "space":
+            return 32;
           default:
-            throw new Error('Unrecognized shorthand '+ str)
-         }
+            console.error("Unrecognized shorthand " + str);
+        }
       }
 
       let keyCode;
       let charCode;
       if (args.keyCode[0] === '"') {
         keyCode = parseStringKey(args.keyCode);
-        if(args.keyCode.length === 3) charCode = args.keyCode.charCodeAt(1);
+        if (args.keyCode.length === 3) charCode = args.keyCode.charCodeAt(1);
       } else {
         keyCode = parseInt(args.keyCode);
       }
 
-     
       if (isNaN(keyCode)) {
         keyCode = getKeyCode(args.keyCode);
       }
-      
+
       if (!keyCode) {
         console.error("invalid keycode for keydown action");
       }
 
-      if(!charCode) charCode = keyCode;
+      if (!charCode) charCode = keyCode;
 
       return () => {
         els.forEach(el => {

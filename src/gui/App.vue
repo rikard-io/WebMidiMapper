@@ -30,7 +30,7 @@ export default {
       false
     );
 
-    window.__wmm_enable = function() {
+    window.__wmm_enable = () => {
       this.toggleUI(true);
     };
 

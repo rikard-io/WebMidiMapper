@@ -223,7 +223,7 @@ export default {
     handleAutoMapValue() {
       this.autoMappingValue = true;
       webMidiMapper.nextValue(this.inputId, this.event, e => {
-        this.value.value = e.data[1];
+        this.internalValue.value = e.data[1];
         this.autoMappingValue = false;
         this.handleInput();
       });
@@ -233,7 +233,7 @@ export default {
     },
     handleElementPick() {
       const callback = ({ target }) => {
-        this.value.selector = calculateSelector(target);
+        this.internalValue.selector = calculateSelector(target);
         this.handleInput();
         elementSelector.off("select", callback);
         elementSelector.disable();
