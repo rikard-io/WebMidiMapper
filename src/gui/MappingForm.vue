@@ -2,7 +2,7 @@
   <tr class="wmm__mapping_form">
     <td>
       <div>
-        <input v-model="selector" :class="{ error: !validSelector }" />
+        <input v-model="selector" @keydown.capture="e=>e.stopPropagation()" @keyup.capture="e=>e.stopPropagation()" :class="{ error: !validSelector }" />
         <button @click="handleElementPick">
           📌
         </button>
@@ -14,6 +14,7 @@
     <td class="wmm__mapping_form_input">
       <input
         type="text"
+        @keydown.capture="e=>e.stopPropagation()" @keyup.capture="e=>e.stopPropagation()"
         v-model="mappingValue"
         :class="{ error: !validateMappingValue() }"
       /><button
@@ -199,6 +200,10 @@ export default {
     }, 200);
   },
   methods: {
+    captureInput(e){
+      e.stopPropagation()
+      console.log('whoop');
+    },
     handleActionPreview(){
       const actionFn = actions[this.action.key].create(querySelector(this.selector), this.action.args);
       actionFn({

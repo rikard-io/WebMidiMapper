@@ -26,6 +26,7 @@
         v-else
         :key="k"
         @input="handleArgInput"
+        @keydown.capture="e=>e.stopPropagation()" @keyup.capture="e=>e.stopPropagation()"
         v-model="args[k]"
         :placeholder="k"
       />
