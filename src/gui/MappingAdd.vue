@@ -5,7 +5,7 @@
     @input="validate"
     v-model="mapping"
   >
-    <button @click="handleAdd" :disabled="!valid">+ ({{valid}})</button>
+    <button @click="handleAdd" :disabled="!valid">+</button>
   </MappingForm>
 </template>
 

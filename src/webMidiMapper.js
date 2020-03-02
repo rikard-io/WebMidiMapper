@@ -89,19 +89,28 @@ class WebMidiMapper {
     const events = event === "all" ? Object.keys(this.events) : [event];
     const inputs =
       inputId === "all" ? webmidi.inputs : [webmidi.getInputById(inputId)];
+    
     const _cb = e => {
-      events.forEach(e => {
-        inputs.forEach(input => input.removeListener(e, channel, _cb));
-      });
+      cancelFn();
       cb({
         ...e,
         note: e.note ? e.note.number : -1,
         value: e.note ? e.note.number : -1
       });
     };
+
+    const cancelFn = ()=>{
+      events.forEach(e => {
+        inputs.forEach(input => input.removeListener(e, channel, _cb));
+      });
+    }
+
     events.forEach(e => {
       inputs.forEach(input => input.addListener(e, channel, _cb));
     });
+    return {
+      cancel: cancelFn
+    };
   }
 
   get supported() {

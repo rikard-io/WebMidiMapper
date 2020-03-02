@@ -110,6 +110,10 @@ export default {
     appearance: none;
     background-color: rgb(200, 200, 200);
     min-width: 40px;
+
+    &:disabled{
+      opacity: 0.5;
+    }
   }
   .wmm__mapping_form_input {
     width: 60px;

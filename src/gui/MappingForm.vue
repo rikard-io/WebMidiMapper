@@ -20,13 +20,13 @@
         :class="{ wmm__tint_button: true, wmm__blink: autoMappingValue }"
         @click="handleAutoMapValue"
       >
-        m
+        M
       </button>
     </td>
     <td>
       <ActionSelect ref="actionSelect" v-model="action" />
-      <button ref="inputDot" class="wmm__tint_button">
-        t
+      <button v-if="validate()" @click="handleActionPreview" ref="inputDot" class="wmm__tint_button">
+        T
       </button>
     </td>
     <td><slot /></td>
@@ -199,12 +199,18 @@ export default {
     }, 200);
   },
   methods: {
+    handleActionPreview(){
+      const actionFn = actions[this.action.key].create(querySelector(this.selector), this.action.args);
+      actionFn({
+        data: [127,127]
+      });
+    },
     validate() {
       if (!this.action) return false;
       if (!this.validSelector) {
         return false;
       }
-      if (!this.$refs.actionSelect.validate()) {
+      if (this.$refs.actionSelect && !this.$refs.actionSelect.validate()) {
         return false;
       }
       return !this.$store.getMappingByProps(this.serialize());
@@ -230,12 +236,20 @@ export default {
       ).id;
     },
     handleAutoMapValue() {
-      this.autoMappingValue = true;
-      webMidiMapper.nextValue(this.inputId, this.event, e => {
-        this.internalValue.value = e.data[1];
-        this.autoMappingValue = false;
-        this.handleInput();
-      });
+      this.autoMappingValue = !this.autoMappingValue;
+      if(this.autoMappingValue){
+        this.nextValueMappingRef = webMidiMapper.nextValue(this.inputId, this.event, e => {
+          this.internalValue.value = e.data[1];
+          this.autoMappingValue = false;
+          this.handleInput();
+          this.nextValueMappingRef = null;
+        });
+      } else {
+        if(this.nextValueMappingRef){
+          this.nextValueMappingRef.cancel();
+          this.nextValueMappingRef = null;
+        }
+      }
     },
     validateMappingValue() {
       return validateValue(this.mappingValue);
@@ -294,7 +308,7 @@ export default {
 #wmm__app__ {
   button.wmm__tint_button {
     position: absolute;
-    width: 8px !important;
+    max-width: 8vw !important;
     height: 8px !important;
     min-width: 10px !important;
     min-height: 10px !important;
@@ -309,6 +323,7 @@ export default {
     padding: 0;
     font-size: 5px;
     color: #fff;
+    font-style: bold;
     &.wmm__blink {
       animation: wmm__blinking 0.5s infinite;
     }
