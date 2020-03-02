@@ -70,9 +70,21 @@ export default {
     font-size: 14px;
     font-weight: 100;
   }
-  
+
   #wmm__app__instructions {
     font-size: 8px;
+  }
+
+  #autoInjectCheckbox {
+    font-size: 8px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: right;
+    input {
+      margin: 0;
+      display: inline-block;
+    }
   }
 
   .select,
@@ -110,8 +122,21 @@ export default {
     appearance: none;
     background-color: rgb(200, 200, 200);
     min-width: 40px;
-
-    &:disabled{
+    &[type="checkbox"] {
+      min-width: 20px;
+      width: 20px;
+      height: 20px;
+      padding: 2px;
+      &::after {
+        text-align: center;
+        margin-left: 2px;
+        content: " ";
+      }
+      &:checked::after {
+        content: "✔";
+      }
+    }
+    &:disabled {
       opacity: 0.5;
     }
   }
