@@ -3,14 +3,13 @@
   "version": "0.0.1",
   "author": "Rikard Lindstrom",
   "manifest_version": 2,
-  "description": "Replace new tab screen with GitHub trending projects.",
+  "description": "Map DOM elements to MIDI!?",
   "homepage_url": "https://rikard.io",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "default_locale": "en",
   "background": {
     "scripts": ["background.js"],
     "persistent": true
